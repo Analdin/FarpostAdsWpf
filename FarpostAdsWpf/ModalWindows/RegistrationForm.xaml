@@ -19,7 +19,7 @@
         </Rectangle>
 
         <Image Source="/ServicesClasses/Icons/write.png" Width="64" Height="64" VerticalAlignment="Top" Margin="20"/>
-        <Rectangle Width="290" Height="240" Fill="White" Visibility="Visible" VerticalAlignment="Bottom" Margin="0,100">
+        <Rectangle Width="290" Height="240" Fill="White" Visibility="Visible" VerticalAlignment="Bottom" Margin="0,100" RadiusX="8" RadiusY="8">
             <Rectangle.Effect>
                 <DropShadowEffect Color="#FFBBBBBB" BlurRadius="15" Direction="-45" RenderingBias="Quality" ShadowDepth="1"/>
             </Rectangle.Effect>
