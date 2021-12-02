@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using FarpostAdsWpf.ModalWindows;
+using FarpostAdsWpf.ServicesClasses;
 using FarpostJob.ServicesClasses;
 using Notification.Wpf;
 using MySql.Data.MySqlClient;
@@ -39,6 +28,8 @@ namespace FarpostAdsWpf.ModalWindows
             //registeredPassword
             //registeredPasswordRepeat
 
+            var notificationManager = new NotificationManager();
+
             DbHelper connect = new DbHelper();
             connect.OpenConnection();
 
@@ -46,12 +37,65 @@ namespace FarpostAdsWpf.ModalWindows
             var registeredPasswordUser = registeredPassword.Password.ToString();
             var registeredPasswordUeserRepeat = registeredPasswordRepeat.Password.ToString();
 
+            var emailFromDb = String.Empty;
             var loginFromDb = String.Empty;
             var passwordFromDb = String.Empty;
+            var rulesFromDb = String.Empty;
+            var statusFromDb = String.Empty;
+
+            var result = GetUsersIds.GetAllUsersIds();
+
+            foreach(var id in result)
+            {
+                var query = $@"SELECT `Email`, `Login`, `Password`, `Rules`, `Status` FROM `UsersInfo` WHERE id={id}";
+
+                var command = new MySqlCommand(query, connect.Connection);
+                var reader = command.ExecuteReader();
+
+                if (reader.Read()) emailFromDb = reader.GetString(0);
+                if (reader.Read()) loginFromDb = reader.GetString(1);
+                if (reader.Read()) passwordFromDb = reader.GetString(2);
+                if (reader.Read()) rulesFromDb = reader.GetString(3);
+                if (reader.Read()) statusFromDb = reader.GetString(4);
+
+                reader.Close();
+                /// <summary>
+                /// Проверяем совпадение пароля и повтора пароля
+                /// </summary>
+                if (registeredPasswordUser != registeredPasswordUeserRepeat)
+                {
+                    notificationManager.Show(new NotificationContent
+                    {
+                        Title = "Ошибка",
+                        Message = "Пароль и повтор пароля не совпадают! Проверьте правильность ввода",
+                        Type = NotificationType.Warning
+                    });
+                }
+                else
+                {
+                    notificationManager.Show(new NotificationContent
+                    {
+                        Title = "Уведомление",
+                        Message = "Пароль и повтор пароля совпадают.",
+                        Type = NotificationType.Information
+                    });
+
+                    InsertUserInDataBase.UserAdd(id, regesteredLoginUser, registeredPasswordUser);
+
+                    notificationManager.Show(new NotificationContent
+                    {
+                        Title = "Уведомление",
+                        Message = "Пользователь " + regesteredLoginUser + " добавлен в базу данных",
+                        Type = NotificationType.Information
+                    });
+                }
+            }
 
             // Пользователь ввел логин и пароль => проверяем, верно ли введено подтверждение пароля,
             // если да - выводим сообщение, что все отлично, пользователь занесен в БД
             // если нет - выводим сообщение, что нужно проверить правильность ввода подтверждения
+
+            connect.CloseConnection();
         }
     }
 }
