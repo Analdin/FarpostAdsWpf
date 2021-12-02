@@ -13,4 +13,13 @@
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ChangeTimeOfAnnounces\" />
+    <Folder Include="ModalWindows\" />
+    <Folder Include="ServicesClasses\Icons\" />
+    <Folder Include="WpfWindows\" />
+    <Folder Include="PostAnnouncment\" />
+    <Folder Include="Parsing\" />
+  </ItemGroup>
+
 </Project>
