@@ -21,6 +21,7 @@
     <Folder Include="ServicesClasses\Icons\" />
     <Folder Include="PostAnnouncment\" />
     <Folder Include="Parsing\" />
+    <Folder Include="WpfWindows\Graphics\" />
   </ItemGroup>
 
 </Project>

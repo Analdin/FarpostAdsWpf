@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using FarpostAdsWpf.ModalWindows;
 using FarpostJob.ServicesClasses;
 using Notification.Wpf;
 using MySql.Data.MySqlClient;
+using FarpostAdsWpf.ServicesClasses;
 
 namespace FarpostAdsWpf
 {
@@ -64,7 +55,7 @@ namespace FarpostAdsWpf
             {
                 List<int> allIds = new List<int>();
 
-                var result = GetUsersIds();
+                var result = GetUsersIds.GetAllUsersIds();
                 allIds.AddRange(result);
 
                 var query2 = $@"SELECT `Login`, `Password` FROM `UsersInfo` WHERE 1";
@@ -130,26 +121,6 @@ namespace FarpostAdsWpf
         {
             RegistrationForm Window = new RegistrationForm();
             Window.Show();
-        }
-
-        public static List<int> GetUsersIds()
-        {
-            DbHelper connectBd = new DbHelper();
-            connectBd.OpenConnection();
-
-            var query = $@"SELECT `Id` FROM `UsersInfo`";
-
-            var result = new List<int>();
-            var command = new MySqlCommand(query, connectBd.Connection);
-            var reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                result.Add(reader.GetInt32(0));
-            }
-
-            reader.Close();
-            return result;
         }
     }
 }
