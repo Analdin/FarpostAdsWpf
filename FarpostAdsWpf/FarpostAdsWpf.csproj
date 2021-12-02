@@ -15,9 +15,7 @@
 
   <ItemGroup>
     <Folder Include="ChangeTimeOfAnnounces\" />
-    <Folder Include="ModalWindows\" />
     <Folder Include="ServicesClasses\Icons\" />
-    <Folder Include="WpfWindows\" />
     <Folder Include="PostAnnouncment\" />
     <Folder Include="Parsing\" />
   </ItemGroup>
