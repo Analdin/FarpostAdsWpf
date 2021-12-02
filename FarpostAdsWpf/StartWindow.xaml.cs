@@ -18,9 +18,9 @@ namespace FarpostAdsWpf
     /// <summary>
     /// Логика для начального окна
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class StartWindow : Window
     {
-        public MainWindow()
+        public StartWindow()
         {
             InitializeComponent();
         }
