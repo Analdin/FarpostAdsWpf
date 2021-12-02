@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace FarpostAdsWpf
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Логика для начального окна
     /// </summary>
     public partial class MainWindow : Window
     {
