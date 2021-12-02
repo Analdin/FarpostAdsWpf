@@ -23,5 +23,10 @@ namespace FarpostAdsWpf.ModalWindows
         {
             InitializeComponent();
         }
+
+        private void Registration_Process(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

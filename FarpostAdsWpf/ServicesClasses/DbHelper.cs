@@ -6,8 +6,8 @@ namespace FarpostJob.ServicesClasses
     public class DbHelper
     {
         private const string Server = "37.140.192.191";
-        private const string DatabaseName = "FarpostBd";
-        private const string UserName = "u1486803_admin";
+        private const string DatabaseName = "u1486803_farpostbd";
+        private const string UserName = "u1486803_admin2";
         private const string Password = "pR5iQ4zF7ovX6l";
 
         public readonly MySqlConnection Connection;

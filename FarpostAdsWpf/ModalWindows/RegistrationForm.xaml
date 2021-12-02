@@ -4,9 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FarpostAdsWpf.ModalWindows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Регистрация" Height="450" Width="800">
+        Title="Регистрация" Height="500" Width="350">
     <Grid>
-        
+        <Rectangle Height="280" VerticalAlignment="Top">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#ff2281D1"/>
+                    <GradientStop Color="#ff34268A" Offset="1"/>
+                    <GradientStop Color="#ff33288B" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <Image Source="/ServicesClasses/Icons/write.png" Width="64" Height="64" VerticalAlignment="Top" Margin="20"/>
+        <Rectangle Width="290" Height="240" Fill="White" Visibility="Visible" VerticalAlignment="Bottom" Margin="0,100">
+            <Rectangle.Effect>
+                <DropShadowEffect Color="#FFBBBBBB" BlurRadius="15" Direction="-45" RenderingBias="Quality" ShadowDepth="1"/>
+            </Rectangle.Effect>
+        </Rectangle>
+
+        <Grid Width="280" Height="240" VerticalAlignment="Bottom" Margin="0,100">
+            <TextBlock Text="Регистрация" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="8" Foreground="Gray" FontSize="18"/>
+            <StackPanel VerticalAlignment="Center" Margin="10">
+                <TextBox x:Name="registeredLogin" materialDesign:HintAssist.Hint="Введите логин" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,5"/>
+                <PasswordBox x:Name="registeredPassword" materialDesign:HintAssist.Hint="Введите пароль" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,5"/>
+                <PasswordBox x:Name="registeredPasswordRepeat" materialDesign:HintAssist.Hint="Повторите пароль" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,5"/>
+            </StackPanel>
+        </Grid>
+
+        <Button VerticalAlignment="Bottom" Margin="0,85" Width="150" Content="Регистрация" Click="Registration_Process"/>
+        <TextBlock Text="Зарегистрируйтесь, чтобы получить доступ" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,40" Foreground="Gray"/>      
     </Grid>
 </Window>

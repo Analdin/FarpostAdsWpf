@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using FarpostWpfJob.ModalWindows;
+using FarpostAdsWpf.ModalWindows;
 using FarpostJob.ServicesClasses;
 using Notification.Wpf;
 using MySql.Data.MySqlClient;
@@ -31,9 +31,9 @@ namespace FarpostAdsWpf
         ///<summary>
         /// Запрос к БД, чтобы проверить условия работы с пользователем
         ///</summary>
-        private void EnterTheProgrammBtn(object sender, MouseButtonEventArgs e)
-        {
 
+        private void EnterTheFpUp(object sender, RoutedEventArgs e)
+        {
             DbHelper connect = new DbHelper();
             connect.OpenConnection();
 
@@ -56,7 +56,7 @@ namespace FarpostAdsWpf
                     Type = NotificationType.Warning
                 });
 
-                ModalWindows.RegistrationForm Window = new ModalWindows.RegistrationForm();
+                RegistrationForm Window = new RegistrationForm();
                 Window.Show();
             }
 
@@ -126,10 +126,9 @@ namespace FarpostAdsWpf
 
             connect.CloseConnection();
         }
-
-        private void RegisterInAppBtn(object sender, MouseButtonEventArgs e)
+        private void Register_Click(object sender, RoutedEventArgs e)
         {
-            ModalWindows.RegistrationForm Window = new ModalWindows.RegistrationForm();
+            RegistrationForm Window = new RegistrationForm();
             Window.Show();
         }
 
