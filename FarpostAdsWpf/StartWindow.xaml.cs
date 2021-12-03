@@ -23,6 +23,7 @@ namespace FarpostAdsWpf
         /// Запрос к БД, чтобы проверить условия работы с пользователем
         ///</summary>
 
+        // c# sql параметры?
         private void EnterTheFpUp(object sender, RoutedEventArgs e)
         {
             DbHelper connect = new DbHelper();
@@ -53,18 +54,15 @@ namespace FarpostAdsWpf
 
             if (!String.IsNullOrWhiteSpace(query))
             {
-                List<int> allIds = new List<int>();
-
                 var result = GetUsersIds.GetAllUsersIds();
-                allIds.AddRange(result);
 
-                var query2 = $@"SELECT `Login`, `Password` FROM `UsersInfo` WHERE 1";
-
-                var command = new MySqlCommand(query2, connect.Connection);
-                var reader = command.ExecuteReader();
-
-                foreach (var userId in allIds)
+                foreach (var userId in result)
                 {
+                    var query2 = $@"SELECT `Login`, `Password` FROM `UsersInfo` WHERE id={userId}";
+
+                    var command = new MySqlCommand(query2, connect.Connection);
+                    var reader = command.ExecuteReader();
+
                     if (reader.Read()) loginFromDb = reader.GetString(0);
                     if (reader.Read()) passwordFromDb = reader.GetString(1);
 
@@ -97,9 +95,8 @@ namespace FarpostAdsWpf
                             Type = NotificationType.Error
                         });
                     }
+                    reader.Close();
                 }
-
-                reader.Close();
             }
 
             //Что может быть при нажатии?

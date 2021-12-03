@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="ChangeTimeOfAnnounces\" />
+    <Folder Include="ViewModels\" />
     <Folder Include="ServicesClasses\Icons\" />
     <Folder Include="PostAnnouncment\" />
     <Folder Include="Parsing\" />
