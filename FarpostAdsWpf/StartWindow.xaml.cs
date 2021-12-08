@@ -37,83 +37,70 @@ namespace FarpostAdsWpf
             var loginFromDb = String.Empty;
             var passwordFromDb = String.Empty;
 
-            var query = $@"SELECT `Name`, `Login` FROM `UsersInfo` WHERE 1";
+            //Лучше
+            if (LoginField.Text.Length > 0)
+            {
+                if (PasswordField.Password.Length > 0)
+                {
+                    List<int> userIds = GetUsersIds.GetAllUsersIds();
 
-            if (String.IsNullOrWhiteSpace(query))
+                    foreach (var userId in userIds)
+                    {
+                        var command = new MySqlCommand($@"SELECT * FROM `UsersInfo` WHERE Login = '" + LoginField.Text + "' AND Password = '" + PasswordField.Password + "'", connect.Connection);
+                        command.ExecuteNonQuery();
+
+                        MySqlDataReader dt = command.ExecuteReader();
+                        dt.Read(); 
+
+                        if  ((string)dt["Login"] != "")
+                        {
+                            notificationManager.Show(new NotificationContent
+                            {
+                                Title = "Уведомление",
+                                Message = "Пользователь авторизовался",
+                                Type = NotificationType.Success
+                            });
+
+                            //вызов основного окна программы
+                        }
+                        else
+                        {
+                            notificationManager.Show(new NotificationContent
+                            {
+                                Title = "Ошибка",
+                                Message = "Пользователь не найден в базе данных, зарегистрируйтесь",
+                                Type = NotificationType.Warning
+                            });
+                        }
+                        dt.Close();
+
+                        RegistrationForm Window = new RegistrationForm();
+                        Window.Show();
+                    }
+                }
+                else
+                {
+                    notificationManager.Show(new NotificationContent
+                    {
+                        Title = "Ошибка",
+                        Message = "Введите пароль",
+                        Type = NotificationType.Warning
+                    });
+                }
+            }
+            else
             {
                 notificationManager.Show(new NotificationContent
                 {
-                    Title = "Уведомление",
-                    Message = "При первом запуске программы - необходимо зарегистрировать одного пользователя",
+                    Title = "Ошибка",
+                    Message = "Введите логин",
                     Type = NotificationType.Warning
                 });
-
-                RegistrationForm Window = new RegistrationForm();
-                Window.Show();
             }
-
-            if (!String.IsNullOrWhiteSpace(query))
-            {
-                var result = GetUsersIds.GetAllUsersIds();
-
-                foreach (var userId in result)
-                {
-                    var query2 = $@"SELECT `Login`, `Password` FROM `UsersInfo` WHERE id={userId}";
-
-                    var command = new MySqlCommand(query2, connect.Connection);
-                    var reader = command.ExecuteReader();
-
-                    if (reader.Read()) loginFromDb = reader.GetString(0);
-                    if (reader.Read()) passwordFromDb = reader.GetString(1);
-
-                    if (loginText.Trim().ToLower() == loginFromDb.Trim().ToLower() && passwordText == passwordFromDb)
-                    {
-                        notificationManager.Show(new NotificationContent
-                        {
-                            Title = "Уведомление",
-                            Message = "Логин и пароль найдены в базе - вошли в программу",
-                            Type = NotificationType.Information
-                        });
-
-                        // добавить открытие основного окна программы
-                    }
-                    else if (loginText.Trim().ToLower() != loginFromDb.Trim().ToLower())
-                    {
-                        notificationManager.Show(new NotificationContent
-                        {
-                            Title = "Ошибка",
-                            Message = "Логин не совпадает с указанным в базе, проверьте правильность ввода",
-                            Type = NotificationType.Error
-                        });
-                    }
-                    else if (passwordText != passwordFromDb)
-                    {
-                        notificationManager.Show(new NotificationContent
-                        {
-                            Title = "Ошибка",
-                            Message = "Пароль не совпадает с указанным в базе, проверьте правильность ввода",
-                            Type = NotificationType.Error
-                        });
-                    }
-                    reader.Close();
-                }
-            }
-
-            //Что может быть при нажатии?
-
-            // ** Самый первый вход (нет пользователей в БД) => сказать, что нужно зарегистрироваться перед использованием проги
-
-            // 1. Не верно введен текст => вывести сообщение об ошибке и сказать, что нужно проверить ввод текста
-            // 2. Верно введен текст и пользователь есть в БД  => перекинуть на форму программы
-            // 3. Текст введен верно, но пользователя нет в БД => перекинуть на форму регистрации
-            // и сказать, что нужно зарегистрироваться перед использованием
-            // 4. Пользователь уже есть в БД => сказать, что пользовательн уже существует и задать
-            // вопрос - нужно ли войти под его учеткой?
-            // 5. Пользователь введен верно, но пароль не верно => сказать, что пароль не верный 
-            // и попросить ввести его заново
 
             connect.CloseConnection();
         }
+
         private void Register_Click(object sender, RoutedEventArgs e)
         {
             RegistrationForm Window = new RegistrationForm();

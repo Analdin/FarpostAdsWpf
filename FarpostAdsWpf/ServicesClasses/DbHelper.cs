@@ -3,6 +3,9 @@ using MySql.Data.MySqlClient;
 
 namespace FarpostJob.ServicesClasses
 {
+    /// <summary>
+    /// Соединение с базой данных
+    /// </summary>
     public class DbHelper
     {
         private const string Server = "37.140.192.191";

@@ -6,6 +6,10 @@ namespace FarpostAdsWpf.ServicesClasses
 {
     public class GetUsersIds
     {
+        /// <summary>
+        /// Получение всех имеющихся в БД id пользователей
+        /// </summary>
+        /// <returns> Список id </returns>
         public static List<int> GetAllUsersIds()
         {
             DbHelper connectBd = new DbHelper();

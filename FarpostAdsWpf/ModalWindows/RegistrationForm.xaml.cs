@@ -24,10 +24,6 @@ namespace FarpostAdsWpf.ModalWindows
         /// <param name="e">Передает объект, относящийся к событию</param>
         private void Registration_Process(object sender, RoutedEventArgs e)
         {
-            //registeredLogin
-            //registeredPassword
-            //registeredPasswordRepeat
-
             var notificationManager = new NotificationManager();
 
             DbHelper connect = new DbHelper();
@@ -45,55 +41,177 @@ namespace FarpostAdsWpf.ModalWindows
 
             var result = GetUsersIds.GetAllUsersIds();
 
-            foreach(var id in result)
+            if (regesteredLoginUser.Length > 0)
             {
-                var query = $@"SELECT `Email`, `Login`, `Password`, `Rules`, `Status` FROM `UsersInfo` WHERE id={id}";
+                string[] dataLogin = regesteredLoginUser.Split('@'); //делим строку на две части
 
-                var command = new MySqlCommand(query, connect.Connection);
-                var reader = command.ExecuteReader();
-
-                if (reader.Read()) emailFromDb = reader.GetString(0);
-                if (reader.Read()) loginFromDb = reader.GetString(1);
-                if (reader.Read()) passwordFromDb = reader.GetString(2);
-                if (reader.Read()) rulesFromDb = reader.GetString(3);
-                if (reader.Read()) statusFromDb = reader.GetString(4);
-
-                reader.Close();
-                /// <summary>
-                /// Проверяем совпадение пароля и повтора пароля
-                /// </summary>
-                if (registeredPasswordUser != registeredPasswordUeserRepeat)
+                if(dataLogin.Length == 2) //проверка, есть ли у нас две части
                 {
-                    notificationManager.Show(new NotificationContent
+                    string[] data2Login = dataLogin[1].Split('.');
+
+                    if(data2Login.Length == 2)
                     {
-                        Title = "Ошибка",
-                        Message = "Пароль и повтор пароля не совпадают! Проверьте правильность ввода",
-                        Type = NotificationType.Warning
-                    });
+
+                    }
+                    else
+                    {
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Уведомление",
+                            Message = "Укажите логин в формате x@x.x",
+                            Type = NotificationType.Notification
+                        });
+                    }
                 }
                 else
                 {
                     notificationManager.Show(new NotificationContent
                     {
                         Title = "Уведомление",
-                        Message = "Пароль и повтор пароля совпадают.",
-                        Type = NotificationType.Information
+                        Message = "Укажите логин в формате x@x.x",
+                        Type = NotificationType.Notification
                     });
+                }
 
-                    InsertUserInDataBase.UserAdd(id, regesteredLoginUser, registeredPasswordUser);
+                if (registeredPasswordUser.Length > 6)
+                {
+                    bool en = true;
 
+                    bool symbol = false;
+
+                    bool number = false;
+
+                    //перебираем символы
+                    for(int i = 0; i < registeredPasswordUser.Length; i++)
+                    {
+                        if (registeredPasswordUser[i] >= 'А' && registeredPasswordUser[i] <= 'Я') en = false;
+                        if (registeredPasswordUser[i] >= '0' && registeredPasswordUser[i] <= '9') number = true;
+                        if (registeredPasswordUser[i] >= '_' || registeredPasswordUser[i] <= '-' || registeredPasswordUser.Length == '!') symbol = true;
+                    }
+
+                    if(!en)
+                    {
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Уведомление",
+                            Message = "Доступна только английская раскладка",
+                            Type = NotificationType.Notification
+                        });
+                    }
+                    else if (!symbol)
+                    {
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Уведомление",
+                            Message = "Добавьте один из следующих символов: _ - !",
+                            Type = NotificationType.Notification
+                        });
+                    }
+                    else if (!number)
+                    {
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Уведомление",
+                            Message = "Добавьте хотя бы одну цифру",
+                            Type = NotificationType.Notification
+                        });
+                    }
+
+                    if(en && symbol && number)
+                    {
+                    }
+
+                    if (registeredPasswordUeserRepeat.Length > 6)
+                    {
+                        for (int i = 0; i < registeredPasswordUser.Length; i++)
+                        {
+                            if (registeredPasswordUeserRepeat[i] >= 'А' && registeredPasswordUeserRepeat[i] <= 'Я') en = false;
+                            if (registeredPasswordUeserRepeat[i] >= '0' && registeredPasswordUeserRepeat[i] <= '9') number = true;
+                            if (registeredPasswordUeserRepeat[i] >= '_' || registeredPasswordUeserRepeat[i] <= '-' || registeredPasswordUser.Length == '!') symbol = true;
+                        }
+
+                        if (!en)
+                        {
+                            notificationManager.Show(new NotificationContent
+                            {
+                                Title = "Уведомление",
+                                Message = "Доступна только английская раскладка",
+                                Type = NotificationType.Notification
+                            });
+                        }
+                        else if (!symbol)
+                        {
+                            notificationManager.Show(new NotificationContent
+                            {
+                                Title = "Уведомление",
+                                Message = "Добавьте один из следующих символов: _ - !",
+                                Type = NotificationType.Notification
+                            });
+                        }
+                        else if (!number)
+                        {
+                            notificationManager.Show(new NotificationContent
+                            {
+                                Title = "Уведомление",
+                                Message = "Добавьте хотя бы одну цифру",
+                                Type = NotificationType.Notification
+                            });
+                        }
+
+                        if (en && symbol && number)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Уведомление",
+                            Message = "Пароль должен быть больше 6 символов. Повторите пароль",
+                            Type = NotificationType.Notification
+                        });
+                    }
+                }
+                else
+                {
                     notificationManager.Show(new NotificationContent
                     {
                         Title = "Уведомление",
-                        Message = "Пользователь " + regesteredLoginUser + " добавлен в базу данных",
-                        Type = NotificationType.Information
+                        Message = "Повтор пароля должен быть больше 6 символов и совпадать с первым паролем. Повторите пароль.",
+                        Type = NotificationType.Notification
+                    });
+                }
+
+                if(registeredPasswordUser == registeredPasswordUeserRepeat)
+                {
+                    notificationManager.Show(new NotificationContent
+                    {
+                        Title = "Уведомление",
+                        Message = "Пользователь зарегистрирован",
+                        Type = NotificationType.Success
+                    });
+
+                    InsertUserInDataBase.UserAdd(regesteredLoginUser, registeredPasswordUser);
+                }
+                else
+                {
+                    notificationManager.Show(new NotificationContent
+                    {
+                        Title = "Ошибка",
+                        Message = "Пароли не совпадают",
+                        Type = NotificationType.Success
                     });
                 }
             }
-
-            // Пользователь ввел логин и пароль => проверяем, верно ли введено подтверждение пароля,
-            // если да - выводим сообщение, что все отлично, пользователь занесен в БД
-            // если нет - выводим сообщение, что нужно проверить правильность ввода подтверждения
+            else
+            {
+                notificationManager.Show(new NotificationContent
+                {
+                    Title = "Уведомление",
+                    Message = "Укажите логин",
+                    Type = NotificationType.Notification
+                });
+            }
 
             connect.CloseConnection();
         }

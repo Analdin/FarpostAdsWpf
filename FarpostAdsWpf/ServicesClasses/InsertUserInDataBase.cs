@@ -17,12 +17,12 @@ namespace FarpostAdsWpf.ServicesClasses
         /// <param name="Password"> Пароль пользователя</param>
         /// <param name="Rules"> Администратор или пользователь?</param>
         /// <param name="Status"> Статус в системе (active или inactive)</param>
-        public static void UserAdd(int Id, string Login, string Password)
+        public static void UserAdd(string Login, string Password)
         {
             DbHelper connect = new DbHelper();
             connect.OpenConnection();
 
-            var query = $@"INSERT INTO `UsersInfo` (`Id`,`Login`, `Password`) VALUES ('{Id}','{Login}', '{Password}');";
+            var query = $@"INSERT INTO `UsersInfo` (`Login`, `Password`) VALUES ('{Login}', '{Password}');";
 
             var command = new MySqlCommand(query, connect.Connection);
 
